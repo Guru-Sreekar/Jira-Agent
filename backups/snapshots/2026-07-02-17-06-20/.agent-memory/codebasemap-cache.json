@@ -1,0 +1,45 @@
+﻿{
+    "hash":  "7482555E84F506519550FBF6D89667D97E5D9E1B14BA592503DEE65C40099BD5",
+    "map":  {
+                "last_updated":  "2026-07-02",
+                "entry_point":  "",
+                "installed_packages":  [
+                                           "@prisma/client",
+                                           "lucide-react",
+                                           "next",
+                                           "next-themes",
+                                           "react",
+                                           "react-dom",
+                                           "@tailwindcss/postcss",
+                                           "@types/node",
+                                           "@types/react",
+                                           "@types/react-dom",
+                                           "eslint",
+                                           "eslint-config-next",
+                                           "prisma",
+                                           "tailwindcss",
+                                           "typescript"
+                                       ],
+                "router":  "",
+                "state_management":  "",
+                "existing_routes":  [
+
+                                    ],
+                "project_type":  "nextjs",
+                "has_backend":  true,
+                "css_framework":  "tailwindcss",
+                "backend_folder":  "backend",
+                "existing_api_endpoints":  [
+
+                                           ],
+                "test_framework":  "",
+                "build_cmd":  "npm run build",
+                "existing_components":  [
+                                            "ClientForm",
+                                            "InvoiceForm",
+                                            "PrintButton",
+                                            "ThemeProvider",
+                                            "ThemeToggle"
+                                        ]
+            }
+}

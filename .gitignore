@@ -1,0 +1,15 @@
+# Secrets - NEVER push these
+.env
+sa-key.json
+
+# Agent run logs
+agent-run-*.log.json
+
+# Backups created by the agent
+*.bak.*
+
+# Memory/temp files
+.remember/
+
+# Node modules (if any)
+node_modules/
