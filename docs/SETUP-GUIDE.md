@@ -1,4 +1,4 @@
-# Setup Guide — Jira Ticket Resolver Agent v9.1
+# Setup Guide — Jira Ticket Resolver Agent v10.1
 
 Step-by-step instructions to get every credential needed to run the agent.
 

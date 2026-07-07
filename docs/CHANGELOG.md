@@ -1,6 +1,6 @@
 # Changelog
 
-## v9.1 - Self-Healing Security Review
+## v10.1 - Self-Healing Security Review
 
 **Release Date:** June 25, 2026  
 **Status:** ✅ Completed  

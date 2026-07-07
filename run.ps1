@@ -1,4 +1,4 @@
-﻿# Jira Ticket Resolver Agent v9.1
+# Jira Ticket Resolver Agent v10.1
 # Fully autonomous: sub-task decomposition, self-learning memory, package auto-install,
 # AI logic review with self-fix retry, cross-file wiring check, read-back verification.
 param(
@@ -97,31 +97,31 @@ $modelCheck = Test-ModelSuitability -Model $model -Provider $provider
 if ($modelCheck.is_problematic) {
     Write-Host ''
     if ($modelCheck.severity -eq 'error') {
-        Write-Host '  ╔═══════════════════════════════════════════════════════════╗' -ForegroundColor Red
-        Write-Host '  ║  ⚠️  CRITICAL MODEL ISSUE DETECTED                       ║' -ForegroundColor Red
-        Write-Host '  ╚═══════════════════════════════════════════════════════════╝' -ForegroundColor Red
+        Write-Host '  +-----------------------------------------------------------+' -ForegroundColor Red
+        Write-Host '  �  ??  CRITICAL MODEL ISSUE DETECTED                       �' -ForegroundColor Red
+        Write-Host '  +-----------------------------------------------------------+' -ForegroundColor Red
     } else {
-        Write-Host '  ┌───────────────────────────────────────────────────────────┐' -ForegroundColor Yellow
-        Write-Host '  │  ⚠️  Model Warning                                        │' -ForegroundColor Yellow
-        Write-Host '  └───────────────────────────────────────────────────────────┘' -ForegroundColor Yellow
+        Write-Host '  +-----------------------------------------------------------+' -ForegroundColor Yellow
+        Write-Host '  �  ??  Model Warning                                        �' -ForegroundColor Yellow
+        Write-Host '  +-----------------------------------------------------------+' -ForegroundColor Yellow
     }
     
     foreach ($w in $modelCheck.warnings) {
-        Write-Host "  │  $w" -ForegroundColor $(if ($modelCheck.severity -eq 'error') { 'Red' } else { 'Yellow' })
+        Write-Host "  �  $w" -ForegroundColor $(if ($modelCheck.severity -eq 'error') { 'Red' } else { 'Yellow' })
     }
-    Write-Host '  │' -ForegroundColor DarkGray
-    Write-Host '  │  Recommended models:' -ForegroundColor Cyan
+    Write-Host '  �' -ForegroundColor DarkGray
+    Write-Host '  �  Recommended models:' -ForegroundColor Cyan
     foreach ($r in $modelCheck.recommended_models) {
-        Write-Host "  │    • $r" -ForegroundColor Green
+        Write-Host "  �    � $r" -ForegroundColor Green
     }
     
     if ($modelCheck.severity -eq 'error') {
-        Write-Host '  │' -ForegroundColor Red
-        Write-Host '  │  This model is known to cause frequent patch failures.' -ForegroundColor Red
-        Write-Host '  │  Update MODEL in .env to one of the recommended models above.' -ForegroundColor Red
-        Write-Host '  ╚═══════════════════════════════════════════════════════════╝' -ForegroundColor Red
+        Write-Host '  �' -ForegroundColor Red
+        Write-Host '  �  This model is known to cause frequent patch failures.' -ForegroundColor Red
+        Write-Host '  �  Update MODEL in .env to one of the recommended models above.' -ForegroundColor Red
+        Write-Host '  +-----------------------------------------------------------+' -ForegroundColor Red
     } else {
-        Write-Host '  └───────────────────────────────────────────────────────────┘' -ForegroundColor Yellow
+        Write-Host '  +-----------------------------------------------------------+' -ForegroundColor Yellow
     }
     Write-Host ''
     
@@ -472,7 +472,7 @@ foreach ($issue in $orderedIssues) {
     $ticketExplanation   = ''
 
     # ============================================================
-    # SUB-TASK EXECUTION LOOP  —  Developer Loop (per-file)
+    # SUB-TASK EXECUTION LOOP  �  Developer Loop (per-file)
     # ============================================================
     $stCounter = 0
     foreach ($subtask in $subtasks) {

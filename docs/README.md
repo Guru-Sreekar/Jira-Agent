@@ -1,4 +1,4 @@
-# Jira Ticket Resolver Agent v9.1 (Principal Engineer AI)
+# Jira Ticket Resolver Agent v10.1 (Principal Engineer AI)
 
 An **autonomous, self-healing AI agent** that connects directly to your Jira board, reads open tickets, infers requirements from vague descriptions, decomposes complex work, generates production-ready code with tests, **automatically fixes security issues through iterative refinement**, verifies builds, and updates Jira — all without human intervention.
 
@@ -13,7 +13,7 @@ An **autonomous, self-healing AI agent** that connects directly to your Jira boa
 - **Self-Learning Memory** — Remembers patterns, fixes, and conventions across runs (per-project)
 
 ### 🔒 **Security & Quality**
-- **Self-Healing Security Review** — Automatically regenerates code when security issues are detected (NEW in v9.1)
+- **Self-Healing Security Review** — Automatically regenerates code when security issues are detected (NEW in v10.1)
 - **Dual-Layer Code Review** — Static analysis + AI Principal Engineer-level logic review
 - **CVE Package Auditing** — Scans newly installed packages for known vulnerabilities
 - **Cross-File Wiring Validation** — Ensures imports resolve before applying changes
@@ -34,7 +34,7 @@ An **autonomous, self-healing AI agent** that connects directly to your Jira boa
 
 ---
 
-## 🆕 What's New in v9.1
+## 🆕 What's New in v10.1
 
 ### 1. **Performance Optimization for Simple Bugs** ⚡ NEW
 Simple bug fixes now process **~60% faster** by skipping unnecessary phases.
@@ -319,7 +319,7 @@ copy .env.local .env
             │   ├─ 7.8 AI Logic Review (Principal Engineer)
             │   │       ├─ Second AI reviews code with fresh eyes
             │   │       ├─ Finds: logic bugs, race conditions, N+1 queries, architecture violations
-            │   │       └─ IF BLOCKED: Self-Fix Retry Loop (NEW v9.1) ⭐
+            │   │       └─ IF BLOCKED: Self-Fix Retry Loop (NEW v10.1) ⭐
             │   │           ├─ Build detailed fix prompt from issues
             │   │           ├─ Regenerate complete solution
             │   │           ├─ Re-run AI Logic Review
@@ -585,7 +585,7 @@ The agent includes comprehensive internal code review **before** applying any ch
 
 ## Changelog
 
-### v9.1 (Latest) — Self-Healing Security Review
+### v10.1 (Latest) — Self-Healing Security Review
 - ✅ **Self-fix retry loop** — Automatically regenerates code when AI review detects security issues
 - ✅ **90% reduction in blocked tickets** — Most security problems now auto-fixed
 - ✅ **Zero manual intervention** — Agent resolves issues autonomously
