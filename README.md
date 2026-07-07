@@ -13,7 +13,7 @@ An **autonomous, self-healing AI agent** that connects directly to your Jira boa
 - **Self-Learning Memory** — Remembers patterns, fixes, and conventions across runs (per-project)
 
 ### 🔒 **Security & Quality**
-- **Self-Healing Security Review** — Automatically regenerates code when security issues are detected (NEW in v10.1)
+- **Self-Healing Security Review** — Automatically regenerates code when security issues are detected
 - **Dual-Layer Code Review** — Static analysis + AI Principal Engineer-level logic review
 - **CVE Package Auditing** — Scans newly installed packages for known vulnerabilities
 - **Cross-File Wiring Validation** — Ensures imports resolve before applying changes
@@ -31,194 +31,6 @@ An **autonomous, self-healing AI agent** that connects directly to your Jira boa
 - **Multi-LLM Support** — OpenAI, Anthropic, Google Gemini, OpenRouter, Qwen
 - **Multi-Language** — JavaScript, TypeScript, Python, Java, Go, Rust, C#, PHP, Ruby
 - **Context-Aware** — Loads related files to match existing patterns and conventions
-
----
-
-## 🆕 What's New in v10.1
-
-### 1. **Performance Optimization for Simple Bugs** ⚡ NEW
-Simple bug fixes now process **~60% faster** by skipping unnecessary phases.
-
-**Optimizations:**
-- ✅ Skip inference for Bug tickets (already specific)
-- ✅ Skip decomposition for Bug tickets (single-purpose fixes)
-- ✅ Reduced sleep delays by ~35 seconds per ticket
-- ✅ Complexity-aware delays (simple bugs get shorter delays)
-
-**Results:**
-- Simple bugs: ~15-25 seconds (was ~60-90 seconds)
-- 2 fewer LLM API calls per simple bug
-- All quality checks still performed
-
-**See:** `docs/PERFORMANCE_OPTIMIZATION.md` for full details
-
-### 2. **Self-Healing Security Review** 🔄
-When AI Logic Review detects critical security issues, the agent **automatically regenerates the code** with fixes instead of blocking.
-
-**Problem Solved:**  
-Previously, security issues would block ticket execution, requiring manual intervention and wasting LLM API calls.
-
-**Solution:**  
-Intelligent retry loop with detailed fix prompts:
-1. AI Review detects issues (hardcoded secrets, missing validation, SQL injection, etc.)
-2. Builds comprehensive fix prompt with all security requirements
-3. Regenerates complete solution with fixes applied
-4. Re-runs AI Logic Review on fixed code
-5. Repeats up to 2 times if needed
-6. Only blocks if unresolvable after retries
-
-**Results:**
-- ✅ **90% reduction in blocked tickets**
-- ✅ **Zero manual intervention** for common security issues
-- ✅ **Higher code quality** — security baked in from the start
-- ✅ **Faster execution** — no human waiting time
-
-**Example Output:**
-```
-[AI REVIEW] BLOCKED - attempting auto-fix (retry 1/2)...
-[REGEN] Regenerating code with security fixes...
-[REGEN] 6 file(s) regenerated
-[AI REVIEW] PASSED after fix!
-```
-
----
-
-## What's New in v9.0
-
-### 1. **Requirement Inference Engine** 🧠
-Instead of rejecting vague tickets, the agent reads your codebase to infer what needs to be done.
-
-**How It Works:**
-- Loads related files based on ticket keywords
-- Analyzes existing patterns and architecture
-- Generates detailed technical specification from context
-- Scores complexity (simple/medium/complex)
-
-**Benefits:**
-- ✅ Handles real-world Jira tickets (which are often underspecified)
-- ✅ No ticket rejection for vague descriptions
-- ✅ Better code consistency by learning from existing patterns
-
-### 2. **Automatic Ticket Decomposition** 📋
-Complex tickets (Epics, high-complexity stories) are automatically split into ordered sub-tasks.
-
-**Features:**
-- Breaks down large features into 3-4 file chunks
-- Tracks dependencies between sub-tasks
-- Respects backend/frontend folder structure
-- Processes sub-tasks sequentially with shared context
-
-**Example:**
-```
-[DECOMPOSE] 6 sub-task(s) identified
-  - Sub-task 1: Backend: Express Server Setup & User Model
-  - Sub-task 2: Backend: Auth Middleware & Auth Routes
-  - Sub-task 3: Backend: Protected Invoice Routes
-  - Sub-task 4: Frontend: API Service Layer & AuthContext
-  - Sub-task 5: Frontend: Login & Register Pages
-  - Sub-task 6: Frontend: ProtectedRoute & Route Structure
-```
-
-### 3. **Cross-File Wiring Validation** 🔗
-Before applying changes, validates that all imports resolve correctly.
-
-**Checks:**
-- Relative imports point to existing or newly created files
-- File extensions match (.ts, .tsx, .js, .jsx, index files)
-- No broken import chains
-
-**Benefits:**
-- ✅ Prevents broken builds from missing imports
-- ✅ Catches issues before `npm run build`
-- ✅ Reduces failed deployments
-
-### 4. **Read-Back Verification** ✅
-After writing files, reads them back and verifies they implement ticket requirements.
-
-**Process:**
-1. Writes all files to disk
-2. Reads back the actual file contents
-3. Sends to LLM for verification against ticket
-4. Reports missing requirements or incomplete implementations
-
-### 5. **Persistent Agent Memory** 🧠
-Self-learning system that remembers across runs (stored per-project in `.agent-memory/`):
-
-**What It Learns:**
-- Codebase architecture (project type, frameworks, conventions)
-- Package compatibility (what packages work together)
-- Error patterns and their fixes
-- Successful patterns from previous tickets
-
-**Benefits:**
-- ✅ Gets smarter with each run
-- ✅ Avoids repeating past mistakes
-- ✅ Faster execution (cached architecture plans)
-
-### 6. **Snapshot System** 📸
-Complete codebase snapshots before making any changes.
-
-**Features:**
-- Timestamps: `backups/snapshots/2026-06-25-05-27-51/`
-- Includes manifest.json with metadata
-- Restore via `.\run.ps1 -Restore` or `-Restore -RestoreDate "2026-06-25"`
-- Auto-cleanup keeps last 10 snapshots
-
-**Benefits:**
-- ✅ Instant rollback to any previous state
-- ✅ Safer than git revert (includes untracked files)
-- ✅ Time-travel debugging
-
----
-
-## What's New in v8.1
-
-### 1. 📂 **Modular Architecture Refactoring**
-The 1,300+ line `run.ps1` script has been split into specialized modules:
-
-| Module | Purpose | Lines |
-|--------|---------|-------|
-| `src/llm.ps1` | LLM API integration (5 providers), error diagnosis | ~120 |
-| `src/jira.ps1` | Jira REST API (v2/v3), ticket context, status updates | ~40 |
-| `src/files.ps1` | File operations, backups, snapshots, package install | ~180 |
-| `src/quality.ps1` | Code review, test generation, validation | ~650 |
-| `src/memory.ps1` | Persistent learning, pattern storage | ~90 |
-| `src/codebase.ps1` | Project detection, intelligence mapping | ~160 |
-
-**Benefits:**
-- ✅ Better maintainability — each module has single responsibility
-- ✅ Easier debugging — issues isolated to specific modules
-- ✅ Testable — modules can be tested independently
-- ✅ Extensible — add new modules without touching core logic
-
----
-
-## What's New in v8.0
-
-### 1. **Ticket Quality Validation** ✅
-Before generating code, the agent validates that tickets have sufficient information:
-- **Checks summary clarity** — Rejects too-short or too-vague summaries
-- **Requires description** — Ensures description has enough detail
-- **Validates requirements** — Looks for acceptance criteria, expected behavior
-- **Bug-specific checks** — Bug tickets must describe error details
-- **Scoring system** — Tickets scoring below 50/100 are rejected with specific feedback
-- **Automatic Jira comments** — Agent tells ticket creator exactly what's missing
-
-### 2. **Automatic Test Generation** 🧪
-After successfully applying code, the agent automatically generates test files:
-- **JavaScript/TypeScript** → Jest test files (`*.test.js`, `*.test.ts`)
-- **Python** → pytest test files (`tests/test_*.py`)
-- **Framework detection** — Recognizes Jest, Mocha, React, Next.js patterns
-- **Smart test structure** — Generates describe/it blocks with basic assertions
-- **Directory organization** — Creates `tests/` folder structure automatically
-
-### 3. **Related Files Context** 🔗
-When modifying a file, the agent loads related files for context:
-- **Same-name variants** — Finds `user.model.js`, `user.controller.js`, `user.routes.js`
-- **Directory awareness** — Loads related files from the same folder
-- **Pattern matching** — Understands model → controller → route relationships
-- **Code consistency** — Generates code matching existing patterns and style
-- **Import accuracy** — Sees how related files are imported and used
 
 ---
 
@@ -241,7 +53,7 @@ copy .env.local .env
 
 ## How It Works (9-Phase Pipeline)
 
-```
+```text
 [Phase 1/9] 🔍 Fetch Tickets from Jira
             ├─ REST API v3 with v2 fallback
             ├─ JQL filtering with pagination
@@ -319,7 +131,7 @@ copy .env.local .env
             │   ├─ 7.8 AI Logic Review (Principal Engineer)
             │   │       ├─ Second AI reviews code with fresh eyes
             │   │       ├─ Finds: logic bugs, race conditions, N+1 queries, architecture violations
-            │   │       └─ IF BLOCKED: Self-Fix Retry Loop (NEW v10.1) ⭐
+            │   │       └─ IF BLOCKED: Self-Fix Retry Loop
             │   │           ├─ Build detailed fix prompt from issues
             │   │           ├─ Regenerate complete solution
             │   │           ├─ Re-run AI Logic Review
@@ -411,124 +223,6 @@ For detailed documentation on setup and features:
 
 ---
 
-## New Features in Detail
-
-### 🎯 Ticket Quality Validation
-
-The agent now validates ticket quality **before** attempting to generate code. This prevents wasted LLM calls on vague tickets.
-
-**Quality Scoring System (0-100):**
-- Summary too short (< 10 chars): **-30 points**
-- Vague summary ("fix app", "update code"): **-40 points**
-- Missing/short description (< 20 chars): **-30 points**
-- No acceptance criteria or requirements: **-20 points**
-- Bug without error details: **-25 points**
-
-**Rejection Threshold:** Score < 50 → Ticket rejected
-
-**What Happens:**
-```
-[REJECTED] Ticket quality too low (Score: 30/100)
-  • Summary too vague - specify what to fix/update/change
-  • Description missing or too short - add details about what needs to be done
-  • No clear requirements - add acceptance criteria or expected behavior
-```
-
-Agent adds a Jira comment explaining exactly what's missing, then moves to the next ticket.
-
-### 🧪 Automatic Test Generation
-
-After successfully applying files, the agent generates test files automatically.
-
-**Supported Languages:**
-- **JavaScript/TypeScript** → Jest test files
-- **Python** → pytest test files
-
-**What Gets Generated:**
-```javascript
-// Auto-generated tests for src/auth/login.js
-import { validateEmail, hashPassword, createSession } from '../src/auth/login';
-
-describe('login', () => {
-  describe('validateEmail', () => {
-    it('should execute without errors', () => {
-      expect(validateEmail).toBeDefined();
-    });
-
-    it('should return expected result', () => {
-      // TODO: Add test implementation
-      expect(true).toBe(true);
-    });
-  });
-  // ... more tests
-});
-```
-
-**Smart Features:**
-- Extracts function names from source code
-- Generates describe/it structure
-- Creates test directory structure (`tests/` folder)
-- Skips files that are already test files
-- Framework detection (Jest, Mocha, React, Next.js)
-
-### 🔗 Related Files Context
-
-When modifying a file, the agent loads related files to understand patterns.
-
-**Discovery Strategy:**
-1. **Same base name, different extension** — `user.js` + `user.test.js` + `user.d.ts`
-2. **Pattern matching** — `user.model.js`, `user.controller.js`, `user.routes.js`
-3. **Directory + keywords** — Files in same folder with related keywords:
-   - `model` → looks for `controller`, `service`, `route`
-   - `controller` → looks for `model`, `service`, `route`
-   - `route` → looks for `controller`, `middleware`
-
-**Benefits:**
-- **Code consistency** — Matches existing naming conventions, patterns, style
-- **Accurate imports** — Sees how related files import each other
-- **Architecture awareness** — Understands project structure and conventions
-- **Better context** — LLM sees related code before generating new code
-
----
-
-## Code Review Features
-
-The agent includes comprehensive internal code review **before** applying any changes:
-
-### Security Checks ✅
-- **Hardcoded secrets detection** — AWS keys, API tokens, passwords
-- **SQL injection patterns** — String concatenation in queries
-- **XSS vulnerabilities** — innerHTML, dangerouslySetInnerHTML, eval()
-- **Command injection** — Unsanitized user input in shell commands
-- **Path traversal** — Directory traversal patterns (../)
-
-### Code Quality Checks ✅
-- **Debug statements** — console.log, print() leftover from debugging
-- **Unused variables** — Variables declared but never used
-- **Missing error handling** — async/await without try-catch, promises without .catch()
-- **TODO/FIXME comments** — Incomplete code markers
-
-### Best Practices ✅
-- **Async/await patterns** — Unnecessary return await, missing async keywords
-- **Null safety** — Missing null/undefined checks, suggest optional chaining
-- **Naming conventions** — var instead of const/let, Python naming standards
-- **Strict equality** — == vs === in JavaScript
-- **Import completeness** — Missing imports for used libraries
-
-### Language-Specific Reviews
-- **JavaScript/TypeScript** — React imports, express/axios usage, strict equality
-- **Python** — numpy/pandas imports, bare except clauses, wildcard imports
-- **Go** — Unchecked errors
-- **PHP** — SQL injection, command injection
-- **Java/Kotlin** — Common security patterns
-
-### Review Actions
-- **CRITICAL ISSUES** (Red) → **Blocks deployment** — Code is NOT applied, ticket marked "In Progress" with detailed feedback
-- **WARNINGS** (Yellow) → **Applied with caution** — Code is applied but issues are logged
-- **SUGGESTIONS** (Cyan) → **Informational** — Best practice improvements for future consideration
-
----
-
 ## Jira Status Behavior
 
 | Outcome | Jira Status | Comment Added |
@@ -579,56 +273,16 @@ The agent includes comprehensive internal code review **before** applying any ch
 | `.env.local` | Configuration template |
 | `SETUP-GUIDE.md` | Step-by-step credential setup |
 | `backups/` | Automatic file backups before patching |
-| `docs/` | Comprehensive documentation (code review, visual diagrams, changelog) |
-
----
-
-## Changelog
-
-### v10.1 (Latest) — Self-Healing Security Review
-- ✅ **Self-fix retry loop** — Automatically regenerates code when AI review detects security issues
-- ✅ **90% reduction in blocked tickets** — Most security problems now auto-fixed
-- ✅ **Zero manual intervention** — Agent resolves issues autonomously
-
-### v9.0 — Autonomous Intelligence
-- ✅ **Requirement inference** — Expands vague tickets by reading and understanding your codebase
-- ✅ **Ticket decomposition** — Automatically splits complex Epics into ordered sub-tasks
-- ✅ **Cross-file wiring** — Validates imports resolve before applying changes
-- ✅ **Read-back verification** — Verifies implementation against ticket requirements
-- ✅ **Persistent memory** — Self-learning across runs (stored per-project)
-- ✅ **Snapshot system** — Complete codebase backups with timestamp-based restore
-
-### v8.1 — Modular Architecture Refactoring
-- ✅ **Modular structure** — Split the 1300+ line script into 6 specialized modules under `src/`
-- ✅ **Improved maintainability** — Dedicated files for LLM, Jira, Files, Quality, Memory, and Codebase logic
-
-### v8.0 — Professional Enhancements
-- ✅ **Ticket validation** — Rejects vague tickets with specific feedback (quality scoring)
-- ✅ **Auto test generation** — Creates Jest/pytest test files automatically
-- ✅ **Related files context** — Loads related files to match existing patterns
-- ✅ Enhanced code consistency and accuracy
-
-### v7.0 — Internal Code Review System
-- ✅ Security checks (secrets, SQL injection, XSS, command injection)
-- ✅ Quality checks (debug logs, error handling, unused variables)
-- ✅ Best practices (async/await, null safety, naming conventions)
-- ✅ Completeness checks (missing imports, TODOs)
-- ✅ Critical issues block deployment
-
-### v6.0 — Senior AI Capabilities
-- ✅ Architecture planning across all tickets
-- ✅ Self-review for completeness
-- ✅ Multi-file output support
-- ✅ Smart ticket ordering (Epics → Standalone → Children)
+| `docs/` | Comprehensive documentation |
 
 ---
 
 ## Best Practices
 
-### Writing Good Tickets (for v8.0 Validation)
+### Writing Good Tickets
 
 **✅ GOOD Examples:**
-```
+```text
 Summary: Add user authentication to login endpoint
 Description: 
 - Add JWT token generation on successful login
@@ -641,7 +295,7 @@ Acceptance Criteria:
 ```
 
 **❌ BAD Examples (Will Be Rejected):**
-```
+```text
 Summary: Fix app
 Description: Not working
 ```
@@ -656,7 +310,7 @@ Description: Not working
 
 ## Example Output
 
-```
+```text
   [5/7] Processing tickets...
 
   +-- [1/3] PROJ-123
